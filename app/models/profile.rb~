@@ -1,5 +1,5 @@
 class Profile < ActiveRecord::Base
-  belongs_to :user
+  belongs_to :user, dependent: :destroy
   validate :name_or_surname_existance
   
   validates :gender, inclusion: { in: ["male","female"],message: "%{value} is not a valid gender" }
@@ -13,9 +13,5 @@ class Profile < ActiveRecord::Base
 
   def name_or_surname_existance
     errors.add(:first_name,"You must type first and/or last name") unless first_name or last_name
-  end
-
-  def self.get_all_profiles(min_year,max_year)
-	  Profile.where(birth_year: min_year .. max_year).order(:birth_year)
   end
 end

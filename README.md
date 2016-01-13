@@ -1,69 +1,59 @@
-## Assignment for Module #2: Active Record Relationships
+## Assignment for Module #3: ActionPack
+The overall goal of this assignment is to assess your ability to implement and 
+customize Rails scaffold. 
 
-The overall goal of this assignment is to assess your ability to implement and use Active Record model relationships. 
 This includes:
 
-  * Creating Active Record models and relationships between the models using a rails-provided generator (`rails g model` or `rails g scaffold`)
-  * Providing validations for models (using built-in Active Record validations as well as custom validations)
-  * Implementing a grandparent relationship with a `:through` option
-  * Providing bootstrap data using a `seeds.rb` file
-  * Implementing `default_scope` queries
-  * Implementing aggregation queries
-  * Implementing advanced queries (e.g., SQL snippets)
-  * Implementing model/database (DB) cascades
+* Creating a Rails scaffold for a Model, View, and Controller (MVC)
+* Modifying the runtime application flow
+* Re-using and customizing partial views
+* Sharing state through the controller attributes with the view
+* Implementing an end-to-end display of a custom query result
 
-The functional goal of this assignment is to implement relationships and 
-query behavior for the following four (4) model classes
-
-  1. User
-  2. Profile
-  3. TodoList
-  4. TodoItem
+The functional goal of this assignment is to implement a web application to manage 
+TodoItems.
 
 ### Functional Requirements
 
-1. Create several Active Record model classes - some of which will
-have relationships defined when they are created
-    * User
-    * Profile
-    * TodoList
+1. Create the scaffold for the following model type:
+
     * TodoItem
 
-2. Create database migrations for relationships not present when the 
-model classes were created
+2. Create the Database (DB) schema for `TodoItem`
 
-3. Create a DB schema for each model class and their relationships
+3. Change the default scaffolding to route to the `index` page versus the `show` 
+   page after a TodoItem is created
 
-4. Populate the DB with bootstrap data
+4. Remove the `Edit` link from the `index` view.
 
-5. Implement relationship features
+5. Modify the TodoItem view partial to display the `Completed` property
+   when a TodoItem is being edited and not during creation.
 
-6. Implement model class features
+6. Display the number of completed TodoItems.
 
 ### Getting Started
 
-1. Create a new Rails application called `todolists`. This will look quite a 
-bit like what you did in the module 1 assignment.
+1. Create a new Rails application called `todolists`
 
-2. Add the following specification to your Gemfile.
+2. Add the following specification to your Gemfile
 
     ```ruby
     group :test do
-     gem 'rspec-rails', '~> 3.0'
+      gem 'rspec-rails', '~> 3.0'
+      gem 'capybara'
     end
     ```
-
 3. Run the `bundle` command to resolve new gems 
 
-4. From the `todolists` application root directory, initialize the rspec tests using 
-  `rails generate rspec:install` command.
+4. From the `todolists` application root directory, initialize the rspec tests 
+   using the `rails generate rspec:install` command
 
     ```shell
       [todolists]$ rails generate rspec:install
-      create  .rspec
-      create  spec
-      create  spec/spec_helper.rb
-      create  spec/rails_helper.rb
+          create  .rspec
+          create  spec
+          create  spec/spec_helper.rb
+          create  spec/rails_helper.rb
     ```
 
     Add the following line to `.rspec` to add verbose output to test results.
@@ -72,32 +62,40 @@ bit like what you did in the module 1 assignment.
     --format documentation
     ```
 
-5. Download and extract the starter set of boostrap files. 
+5. Download and extract the starter set of bootstrap files. 
 
     ```shell
     |-- Gemfile
+    |-- db
+    |    `-- seed.rb
     `-- spec
-        `-- assignment_spec.rb
+        `-- features
+            `-- module3_action_pack_spec.rb
     ```
 
     * overwrite your existing Gemfile with the Gemfile from the bootstrap fileset. They 
-    should be nearly identical, but this is done to make sure the gems and versions you use in 
-    your solution can be processed by the automated Grader when you submit. Any submission
-    should be tested with this version of the file.
+      should be nearly identical, but this is done to make sure the gems and versions you use in 
+      your solution can be processed by the automated Grader when you submit. Any submission
+      should be tested with this version of the file.
 
-    * add the `spec/assignment_spec.rb` file provided with the bootstrap fileset 
-    to the corresponding `spec` directory that already exists under your application root directory
-    (e.g., `application-root-directory/spec/assignment_spec.rb`). 
-    This file contains tests that will help determine whether you have completed the assignment.
+    * overwrite your existing `db/seed.rb` file using the `seeds.rb` provided
+      with the bootstrap fileset. The bootstrap `seeds.rb` file contains some test 
+      data that will be useful during development and unit tests.
+
+    * add the `spec/features/module3_action_pack_spec.rb` file provided with the 
+      bootstrap fileset to your `todolists` application. Within your application
+      root directory, you will first need to create a corresponding `spec/features` 
+      sub-directory to place the `module3_action_pack_spec.rb` file. 
+      This file contains tests that will help determine whether you have completed 
+      the assignment.
 
 6. Run the rspec test(s) to receive feedback. `rspec` must be run from the root directory
 of your application.  All tests will (obviously) fail until you complete the specified solution.
 
     ```shell
-    $ rspec
+    $ rspec 
     ...
-    Finished in 0.02831 seconds (files took 1.39 seconds to load)
-    56 examples, 1 failure, 54 pending
+    19 examples, 1 failure, 17 pending
     ```
 
     To focus test feedback on a specific step of the requirements, add "-e rq##" to the
@@ -108,266 +106,282 @@ of your application.  All tests will (obviously) fail until you complete the spe
     $ rspec -e rq01
     Run options: include {:full_description=>/rq01/}
 
-    Assignment
+    Module #3
       rq01
         Generate Rails application
           must have top level structure of a rails application
 
-    Finished in 0.00356 seconds (files took 1.3 seconds to load)
+    Finished in 0.00465 seconds (files took 1.56 seconds to load)
     1 example, 0 failures
     ```
 
-    ```shell
-    $ rspec -e rq02
-
-    ...
-    Finished in 0.00422 seconds (files took 2.16 seconds to load)
-    6 examples, 1 failure, 5 pending
-
-    Failed examples:
-
-    rspec ./spec/assignment_spec.rb:50 # Assignment rq02 User Model: User class created
-    ```
-
-7. Implement your Models and use the rspec tests to help 
-verify your completed solution.
+7. Implement your solution to the technical requirements and use the rspec tests 
+to help verify your completed solution.
 
 8. Submit your Rails app solution for grading.
 
 ### Technical Requirements
 
-1. Create a new Rails app called `todolists`.  Use the Gemfile provided
-in the boostrap files. Do not change the Gemfile from what is provided
-or your submitted solution may not be able to be processed by the grader
-(i.e., do not add any additional gems or change gem versions).
-
-    An Entity Relationship (ER) diagram is provided below to help depict each 
-    Model's relationship:
-
-        |------| 1      1 |----------|
-        | User |----------| Profile  |
-        |------|          |----------|
-            \
-             \
-              \ 1   * |----------| 1      * |----------|
-               \------| TodoList |----------| TodoItem | 
-                      |----------|          |----------|
-
-2. Re-use the `User` model class and database table creation commands implemented in
-Assignment 1. (i.e., you may re-use the exact `rails generate` command
-you used to generate this class from the previous assignment)
-
-    * User
-        - username - a string to hold account identity
-        - password_digest - a string to hold password information
-
-    Reminder: Ruby/Rails conventions are that class names are CamelCase and file and method names are snake_case.
-
-    You must migrate the database schema at this time and in between 
-    each of the following steps to be able to pass the rspec tests incrementally.
+1. Create a new Rails app called `todolists`. Use the Gemfile provided
+in the bootstrap files (as stated in Step 5 within the Getting Started section). 
+Do not change this Gemfile from what is provided or your submitted solution may 
+not be able to be processed by the grader (i.e., do not add any additional gems 
+or change gem versions).
 
     ```shell
-    $ rake db:migrate
-    $ rspec -e rq02
-    Run options: include {:full_description=>/rq02/}
-
-    Assignment
-      rq02
-        User Model:
-          User class created
-          User database structure in place
-          User class properties added
-            should respond to #username
-            should respond to #password_digest
-            should respond to #created_at
-            should respond to #updated_at
-
-    Finished in 0.19157 seconds (files took 1.27 seconds to load)
-    6 examples, 0 failures
+    $ rails new ...
+    $ rspec -e rq01
     ```
 
-3. Re-use the `Profile` model class and database table creation commands implemented in 
-Assignment 1, except this time create it with a reference to `User` when you create the model class.
-The grader will look for the relationship to be included in the initial create table
-migration for this model class.
-
-    * Profile
-        - gender - a string to hold the words "male" or "female"
-        - birth_year - a number to hold the year the individual was born
-        - first_name - a string with given name of user
-        - last_name - a string with family name of user
-        - user - a 1:1 relationship with User (i.e., Profile `belongs_to` User)
-
-    Also define the 1:1 `has_one` relationship in the `User` model class.
-
-    * User
-        - profile - a 1:1 relationship with `Profile` (i.e., User `has_one` profile). Add
-        appropriate options to have the `User` model class delete a 
-        `Profile` in a cascading fashion
-
-    Reminder: Relationships are only generated or migrated in the class forming the relationship 
-    (e.g., the many-side of a many:1). The inverse side of a relationship 
-    (e.g., the one-side of a 1:many) need only have the relationship declared in the model class
-    and not in the database migration. In this case, `Profile` is forming the relationship in the 
-    database and `User` is the inverse side.
-
-    ```shell
-    $ rake db:migrate
-    $ rspec -e rq03
-    ```
-
-4. Re-use the `TodoList` model class implemented in Assignment 1 (i.e., you may 
-re-use the exact `rails generate` command you used to generate this class
-from the previous assignment). The grader will look for no relations in the 
-initial create table migration for this model class.
-
-    * TodoList
-        - list_name - a string name assigned to the list
-        - list_due_date - a date when todo items in the list are to be complete. 
-          This is a date. We are not concerned with the time of day.
-
-    ```shell
-    $ rake db:migrate
-    $ rspec -e rq04
-    ```
-
-5. Create a database migration (hint: `rails g migration`) that adds a database reference from the `TodoLists` table
-to the `Users` table.  The grader will look for this relationship to be formed by a database table migration.
-
-    Also define the many:1 `belongs_to` relationship in the `TodoList` model class.
-
-    * TodoList
-        - user - a many:1 relationship with `User` (i.e., TodoList `belongs_to` User)
-
-    Also define the 1:many `has_many` relationship in the `User` model class.
-
-    * User
-        - todo_lists - a 1:many relationship with `TodoList` (i.e., User `has_many` todo_lists).
-        Add appropriate options to have the `User` model class delete a 
-	`TodoList` in a cascading fashion
-
-    ```shell
-    $ rake db:migrate
-    $ rspec -e rq05
-    ```
-
-6. Re-use the `TodoItem` model class implemented in Assignment 1, except this time
-create it with a many:1 `belongs_to` relationship with `TodoList` when you create the model class.
-The grader will look for the relationship to be included in the initial create table
-migration for this model class.
+2. Using the `rails generate scaffold` command, create a Rails MVC artifact for 
+a TodoItem that has the following business-related fields: 
 
     * TodoItem
         - due_date - date when the specific task is to be complete
         - title - a string with short name for specific task
-        - description - a text field with narrative text for specific task
+        - description - a string with narrative text for specific task
         - completed - a boolean value (default=false), indicating whether item is complete
-        - todo_list - a many:1 relationship with TodoList - TodoItem belongs_to TodoList
 
-    Also define the 1:many `has_many` relationship in the `TodoList` model class.
+    It is assumed that this type will also contain the `id`, `created_at`, and 
+    `updated_at` fields. Migrate the database as a part of this requirement 
+    to populate the database with the TodoItem schema.
 
-    * TodoList
-        - todo_items - a 1:many relationship with `TodoItem` (i.e., TodoList `has_many` todo_items).
-          Add appropriate options to have the `TodoList` model class delete a 
-          `TodoItem` in a cascading fashion
 
     ```shell
-    $ rake db:migrate
+    $ rails g scaffold ... 
+    $ rake db:migrate 
+    $ rspec -e rq02
+    ```
+
+    Note that the above `rake db:migrate` command will execute against the 
+    `db/development.sqlite3` database instance. The capybara rspec tests will 
+    use the `db/test.sqlite3` database instance and automatically run `db:migrate`
+    and `db:seed` on its own. The default database for all commands is 
+    the development database.
+
+    * Use `rake db:seed RAILS_ENV=test` to execute the db/seed.rb against the test database.
+    * Use `rails db -e test` to access the test database.
+    * Use `rails c test` to use the Rails console to interact with the test database.
+
+    Since the grader uses a separate `test` database instance, you can modify the state of the `development`
+    database as you wish during your development.
+
+    We will have specific interest in the following artifacts.
+
+    ```shell
+    db/migrate/..._create_todo_items.rb
+    app/models/todo_item.rb
+    app/controllers/todo_items_controller.rb
+    app/views/todo_items/index.html.erb
+    app/views/todo_items/edit.html.erb
+    app/views/todo_items/show.html.erb
+    app/views/todo_items/new.html.erb
+    app/views/todo_items/_form.html.erb
+    ```
+
+3. Seed the database with the `db/seeds.rb` file supplied in the student-start 
+bootstrap files. Do not modify this file. The grader expects test results to be 
+based on this input.
+
+    ```shell
+    $ rake db:seed 
+    $ rspec -e rq03
+    ```
+
+4. Start the Rails server and navigate to the todo_items index page.
+
+    ```shell
+    $ rails s
+    ```
+    [http://localhost:3000/todo_items](http://localhost:3000/todo_items)
+
+    ```shell
+    $ rspec -e rq04
+    ```
+
+5. Using the `New Todo item` link, create a new TodoItem (with any data).
+   After a new Todo Item has been successfully created, notice the page that 
+   it navigated you to. This is the show page.
+
+    ```shell
+    $ rspec -e rq05
+    ```
+
+    * Review how the `submit` action in the view invokes a `create` URI when 
+      the user presses the `Create Todo Item` button. 
+
+        ```shell
+        app/views/todo_items/new.html.erb
+        app/views/todo_items/_form.html.erb
+        ```
+
+
+        ```html
+        <%= form_for(@todo_item) do |f| %>
+          ...
+          <div class="actions">
+            <%= f.submit %>
+          </div>
+        <%= end %>
+        ```
+
+    * Notice that the `create` method in the controller handles the `create` URI call passed 
+      by the view and persists the new TodoItem. When the save operation is completed, 
+      the controller then redirects the flow to the `show` URI for the @todo_item.
+
+        ```ruby
+        # POST /todo_items
+        # POST /todo_items.json
+        def create
+          @todo_item = TodoItem.new(todo_item_params)
+
+          respond_to do |format|
+            if @todo_item.save
+              format.html { redirect_to @todo_item, notice: 'Todo item was successfully created.' }
+              format.json { render :show, status: :created, location: @todo_item }
+            ...
+            end
+          end
+        end
+        ```
+
+    * Notice that the `show` method in the controller retrieves the persisted 
+      TodoItem by `:id`. By default the flow continues to the `show` page, 
+      where the view displays the details of the newly created @todo_item.
+
+        ```ruby
+        class TodoItemsController < ApplicationController 
+          before_action :set_todo_item, only: [:show, ...] 
+
+        ... 
+
+        # GET /todo_items/1
+        # GET /todo_items/1.json
+        def show
+        end 
+
+        ...
+
+        private
+            # Use callbacks to share common setup or constraints between actions.
+            def set_todo_item
+              @todo_item = TodoItem.find(params[:id])
+            end
+
+            ...
+        ```
+
+
+        ```shell
+        app/views/todo_items/show.html.erb
+        ```
+
+
+        ```html
+        <p>
+          <strong>Due date:</strong>
+          <%= @todo_item.due_date %>
+        </p>
+
+        <p>
+          <strong>Title:</strong>
+          <%= @todo_item.title %>
+        </p>
+
+        <p>
+          <strong>Description:</strong>
+          <%= @todo_item.description %>
+        </p>
+
+        <p>
+          <strong>Completed:</strong>
+          <%= @todo_item.completed %>
+        </p>
+        ```
+
+    * Note the mapping of helper_method_prefix, method/URI, and controller#method
+      mappings shown by the `rake routes` command. This shows which action in the 
+      controller will be called when a method/URI is invoked. 
+        
+        - The controller method is optional and the flow will continue
+          to the view of the same name as the intended action when that
+          occurs. 
+        - If a controller method does exist and matches the action's name, it has
+          the ability to add member @variables with state for the views to
+          use (e.g., set_todo_item called prior to show). 
+        - If the controller method does not change the route (e.g., show does
+          not change the route), then the flow will continue to the view of
+          the same name as the action.
+        - If the controller method changes the route through a `redirect_to`
+          (e.g., the create action re-directs the flow to the show URI), the 
+          flow will follow the newly defined path by sending the HTTP client 
+          a re-direct.
+        - If the controller method changes the route using a `render` (e.g.,
+          the create action redenders a JSON document response when JSON is requested),
+          the specified view is returned directly to the client.
+
+
+        ```shell
+        $ rake routes
+                Prefix Verb   URI Pattern                    Controller#Action
+            todo_items GET    /todo_items(.:format)          todo_items#index
+                       POST   /todo_items(.:format)          todo_items#create
+         new_todo_item GET    /todo_items/new(.:format)      todo_items#new
+        edit_todo_item GET    /todo_items/:id/edit(.:format) todo_items#edit
+             todo_item GET    /todo_items/:id(.:format)      todo_items#show
+                       PATCH  /todo_items/:id(.:format)      todo_items#update
+                       PUT    /todo_items/:id(.:format)      todo_items#update
+                       DELETE /todo_items/:id(.:format)      todo_items#destroy
+        ```
+
+
+6. Modify the flow so that the user is directed back to the `index`
+page after creating a TodoItem instead of the `show` page. (Hint: you
+are changing the URI redirected by the controller's `create` method.
+Use `rake routes` to help determine the appropriate helper_method_prefix, URI, 
+and controller#method mappings.  Append `_url` to the helper method prefix
+when implementing this redirection.)
+
+    ```shell
+    $ rake routes
     $ rspec -e rq06
     ```
-7. Migrate all database schema changes at this time if you have not yet done so. At this point
-you should have:
 
-    * four (4) create table (Users, Profiles, TodoLists, and TodoItems)
-    * one (1) update table migrations to add reference (TodoLists to Users)
+7. Remove the `Edit` link from the `index` page view. (You will still be able to 
+access edit from the `show` page view).
 
     ```shell
-    $ rake db:migrate
     $ rspec -e rq07
     ```
 
-8. Implement a 1:many `:through` relationship from `User` to `TodoItem` by  using the 
-1:many relationship from `User` to `TodoLists` as a source.
-
-    * User
-        - todo_items - a 1:many through relationship with TodoItem through TodoLists 
-        (i.e., User `has_many` todo_items)
+8. Add conditional logic to the `_form.html.erb` partial so that it only displays the 
+`completed` property when editing and not when creating. 
+(A TodoItem cannot possibly be done before it is created;)
 
     ```shell
     $ rspec -e rq08
     ```
 
-9. Create a seeds.rb file that will clear the existing data from the model tables and load the database with
+    Hint: You can obtain the model object's persisted state using 
+    `object.persisted?` or `object.new_record?` to help determine 
+    if it is new or being edited. 
 
-    * The four users below with their birth years:
-        - Carly Fiorina, 1954
-        - Donald Trump, 1946
-        - Ben Carson, 1951
-        - Hillary Clinton, 1947
-    * Usernames (e.g., their last names) and a password for each `User` 
-    * A `Profile` for each `User`
-    * Exactly one `TodoList` per `User` that is due one year from the date the database is loaded 
-        - (hint: `Date.today` provides today's date and `1.year` can be used to define one year)
-    * Each `TodoList` contains five (5) `TodoItems` (there must be 20 total) 
-    * Each `TodoItem` having a due date of one year from the time the database is loaded  
-    * Each `TodoItem` must have an arbitrary `title` and `description`s
-  
-    (Hint: you may want to consider using loops)
+9. Display the number of completed TodoItems on the `index` page.
 
-    Once the seeds.rb file is created, populate the database using `rake db:seed`
+    1. Implement a class method in the `TodoItem` model that returns the count of completed TodoItems.
+    2. Update the `index` method in the controller class to assign the count of completed TodoItems
+       in a member variable (.e.g, @number_of_completed_todos)
+    3. Display the count of completed TodoItems on the `index` page using a reference by the view
+       -- to the member variable defined in the controller class. The grader is looking for the result to be 
+       expressed as `Number of Completed Todos: #` anywhere on the page -- where `#` is the number of 
+       completed todos. There must be a single space between the `:` and number.
 
     ```shell
-    $ rake db:seed
     $ rspec -e rq09
     ```
 
-10. Add `default_scope` to both `TodoList` and `TodoItem` models to always return collectons
-from the database ordered by due dates with earliest dates first.
-
-    ```shell
-    $ rspec -e rq10
-    ```
-11. Add validation to `User` and `Profile` models
-
-  * User
-    - Define a validation for `username` to enforce that username be supplied by using a built-in validator
-
-  * Profile
-    - Define custom validator that permits `first_name` or `last_name` to be null but not both
-    - Define a validation for `gender` to be either "male" or "female" by using a built-in validator
-    - Define custom validator that prevents anyone that is `male` (gender) from having the 
-      `first_name` "Sue" ;)
-
-    ```shell
-    $ rspec -e rq11
-    ```
-
-12. Add a cascade of deletes that will remove `Profile`, `TodoList`, and `TodoItem` rows for 
-any `User` removed.
-
-    ```shell
-    $ rspec -e rq12
-    ```
-
-13. Add a method to the `User` model class called `get_completed_count`, which: 
-  
-    * determines the number of `TodoItems` the `User` has completed using an aggregate query function 
-        - (Hint: You are looking for the count of `TodoItems` associated with a specific `User` where `completed:true`)
-    * returns the count
-
-    ```shell
-    $ rspec -e rq13
-    ```
-14. Add a **class** method to the `Profile` class, called `get_all_profiles`, which:
- 
-    * accepts a min and max for the `birth year`
-    * issues a `BETWEEN` SQL clause in a `where` clause to locate `Profiles` 
-    with birth years that are between min year and max year 
-    * defends itself against SQL injection when applying the parameters to the SQL clauses
-    * returns a collection of Profiles in ASC birth year order
-
-    ```shell
-    $ rspec -e rq14
-    ```
+    Hint: This should be very similar to how the view class gets the list of TodoItems
+    from the controller using the `@todo_items` member variable.
 
 ### Self Grading/Feedback
 
@@ -378,8 +392,7 @@ your solution. They must be run from the project root directory.
 ```shell
 $ rspec 
 ...
-Finished in 9.56 seconds (files took 1.41 seconds to load)
-56 examples, 0 failures
+19 examples, 0 failures
 ```
 
 You can run as many specific tests you wish be adding `-e rq## -e rq##`
@@ -418,4 +431,4 @@ and will perform a test with different query terms.
 `-- vendor
 ```
 
-#### Last Updated: 2015-10-20
+#### Last Updated: 2015-10-25

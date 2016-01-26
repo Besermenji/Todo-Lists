@@ -1,5 +1,6 @@
 <p id="notice"><%= notice %></p>
 
+<<<<<<< HEAD
 <p>
   <strong>Title:</strong>
   <%= @todo_item.title %>
@@ -22,3 +23,7 @@
 <p>Member of <%= @todo_list.list_name%></p>
 <%= link_to 'Edit', edit_todo_list_todo_item_path(@todo_list, @todo_item) %> |
 <%= link_to 'Back', @todo_list %>
+=======
+<%= link_to 'Edit', edit_todo_item_path(@todo_item) %> |
+<%= link_to 'Back', todo_items_path %>
+>>>>>>> 3e34aece3f86ec25e23938cf87176b281c263f57

@@ -167,7 +167,10 @@ GEM
       binding_of_caller (>= 0.7.2)
       railties (>= 4.0)
       sprockets-rails (>= 2.0, < 4.0)
+<<<<<<< HEAD
     will_paginate (3.0.7)
+=======
+>>>>>>> 3e34aece3f86ec25e23938cf87176b281c263f57
     xpath (2.0.0)
       nokogiri (~> 1.3)
 

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 <%= form_for([@todo_list, @todo_item]) do |f| %>
+=======
+<%= form_for(@todo_item) do |f| %>
+>>>>>>> 3e34aece3f86ec25e23938cf87176b281c263f57
   <% if @todo_item.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@todo_item.errors.count, "error") %> prohibited this todo_item from being saved:</h2>
@@ -11,6 +15,7 @@
     </div>
   <% end %>
 
+<<<<<<< HEAD
   <div class="field">
     <%= f.label :title %><br>
     <%= f.text_field :title %>
@@ -30,6 +35,21 @@
   </div>
   <%end%>
   <div class="actions">
+=======
+  <div class="actions">
+	   <%= f.label :due_date %>:
+	   <%= f.date_select :due_date %><br />
+
+	    <%= f.label :title %>:
+	    <%= f.text_field :title %><br />
+
+	     <%= f.label :description %>
+	     <%= f.text_field :description %><br />
+		<% if action_name == "edit"%>
+	      <%= f.label :completed %>:
+	      <%= f.check_box :completed %><br />
+      <%end%>
+>>>>>>> 3e34aece3f86ec25e23938cf87176b281c263f57
     <%= f.submit %>
   </div>
 <% end %>

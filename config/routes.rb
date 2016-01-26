@@ -20,7 +20,7 @@ Rails.application.routes.draw do
 	  delete "/logout" => "sessions#destroy", as: "logout"
 
   # See how all your routes lay out with "rake routes".
-
+  resources :todo_items
   # You can have the root of your site routed with "root"
   # root 'welcome#index'
 

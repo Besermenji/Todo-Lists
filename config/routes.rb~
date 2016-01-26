@@ -6,7 +6,7 @@ Rails.application.routes.draw do
  
 
   # The priority is based upon order of creation: first created -> highest priority.
-	root to: "todo_lists#index"
+	root "todo_lists#index"
 	resources :todo_lists do
 	  resources :todo_items
 	end
